@@ -1,7 +1,7 @@
 build:
 	hugo
 clean:
-	rm -r /dist
+	rm -r dist/
 post:
 	hugo new posts/$(POST_NAME)
 	sed -i 's/$(POST_NAME)/$(POST_TITLE)/g' /content/posts/$(POST_NAME)
