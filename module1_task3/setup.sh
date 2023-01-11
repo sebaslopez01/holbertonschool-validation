@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-apt-get install -y hugo make
+apt-get update && apt-get install -y hugo make
 
 make build
