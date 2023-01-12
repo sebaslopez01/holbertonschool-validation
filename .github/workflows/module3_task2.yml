@@ -15,6 +15,9 @@ jobs:
       - run: cd module3_task2 && make build
       - run: cd module3_task2 && make package
       - run: cd module3_task2 && make lint
+      - run: cd module3_task2 && make unit-tests
+      - run: cd module3_task2 && make integration-tests
+      - run: cd module3_task2 && make validate
       - uses: actions/upload-artifact@v3
         with:
           path: module3_task2/awesome-website.zip
