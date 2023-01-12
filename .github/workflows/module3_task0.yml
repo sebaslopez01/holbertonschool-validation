@@ -1,0 +1,14 @@
+name: module3_task0
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  Execute-make-help:
+    name: Execute command make help
+    runs-on: ubuntu-20.04
+    steps:
+      - run: cd module3_task0 && make help
+    
