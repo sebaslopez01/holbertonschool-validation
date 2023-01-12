@@ -11,4 +11,3 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - run: cd module3_task0 && make help
-    
