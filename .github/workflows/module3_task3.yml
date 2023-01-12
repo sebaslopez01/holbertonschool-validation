@@ -20,11 +20,9 @@ jobs:
       - run: cd module3_task3 && make unit-tests
       - run: cd module3_task3 && make integration-tests
       - run: cd module3_task3 && make validate
-      - name: Zip file
       - uses: actions/upload-artifact@v3
         with:
-          path: module3_task3/awesome-website.zip
-      - name: Tag Release
+          path: module3_task3/awesome-website.zip      
       - uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/1.0.0')
         with:
