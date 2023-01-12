@@ -14,5 +14,5 @@ jobs:
       - run: sudo module3_task2/setup.sh
       - run: cd module3_task2 && make package
       - uses: actions/upload-artifact@v3
-      with:
-        path: module3_task2/awesome-website.zip
+        with:
+          path: module3_task2/awesome-website.zip
