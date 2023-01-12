@@ -14,5 +14,11 @@ package: build ## Produces a file awesome-website.zip, containing the binary awe
 lint:	## Lint markdown
 	markdownlint README.md DEPLOY.md
 
+unit-tests: ## Run unit tests
+
+integration-tests: ## Run integrations test
+
+validate: ## Validate
+
 help:	## View all make commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | sed -e 's/##//'
