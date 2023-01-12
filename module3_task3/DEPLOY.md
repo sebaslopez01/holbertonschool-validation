@@ -28,3 +28,7 @@ You can use
     hugo server
 
 To see if the app is running
+
+## Deploy zip tag
+
+When a tag 1.0.0 is created the zip file with the DEPLOY will be available
