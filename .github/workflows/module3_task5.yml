@@ -40,8 +40,8 @@ jobs:
         with:
           publish-dir: 'module3_task5/dist'
           production-branch: main
-          deploy-message: "Deployed"
-          publish-message: 'Published'
+          deploy-message: '🚀 Deployed on'
+          publish-message: '🎉 Published on'
           enable-pull-request-comment: true
           enable-commit-comment: true
           overwrites-pull-request-comment: true
