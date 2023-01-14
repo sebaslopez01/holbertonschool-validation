@@ -14,7 +14,6 @@ jobs:
     steps:
       - uses: release-drafter/release-drafter@v5
         with:
-          config-name: workflows/release_drafter.yml
-          disable-autolabeler: true
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels: "changelog"
+          output: changelog.md
