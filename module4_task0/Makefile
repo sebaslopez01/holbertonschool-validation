@@ -19,7 +19,7 @@ unit-tests: ## Run unit tests
 	touch coverage-units.out
 
 integration-tests: ## Run integrations test
-	touch converage-integrations.out
+	touch coverage-integrations.out
 
 validate: ## Validate
 
