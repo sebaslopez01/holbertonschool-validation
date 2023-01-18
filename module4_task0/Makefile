@@ -1,6 +1,6 @@
 build:	## Generate the website from the markdown and configuration files in the directory dist/
 	hugo
-	touch awesome-api/
+	touch awesome-api
 
 clean:	## Cleanup the content of the directory dist/
 	rm -r dist/
