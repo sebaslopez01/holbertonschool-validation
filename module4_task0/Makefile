@@ -16,8 +16,10 @@ lint:	## Lint markdown
 	markdownlint README.md DEPLOY.md
 
 unit-tests: ## Run unit tests
+	touch coverage-units.out
 
 integration-tests: ## Run integrations test
+	touch converage-integrations.out
 
 validate: ## Validate
 
