@@ -1,43 +1,65 @@
-.PHONY: build build-docker
+.PHONY: build
 
-build:	## Generate the website from the markdown and configuration files in the directory dist/
-	curl -L https://github.com/gohugoio/hugo/releases/download/v0.109.0/hugo_extended_0.109.0_linux-amd64.deb -o hugo_extended.deb
-	apt-get install -y ./hugo_extended.deb
-	rm hugo_extended.deb
-	hugo
-	touch awesome-api
+go-build:	## Builds the API binary file using go
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build /bin/bash -c "go mod init github.com/Apinedas/awesome-api && go get github.com/gorilla/mux && go build"
 
-clean:	## Cleanup the content of the directory dist/
-	rm -r dist/
+hugo-build:		## Builds a website using gohugo on the dist folder
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build hugo
 
-post:	## Create a new blog post whose filename and title come from the environment variables POST_TITLE and POST_NAME
-	hugo new content/posts/$(POST_NAME).md
-	sed -i 's/title:.*/title: "$(POST_TITLE)"/' content/posts/$(POST_NAME).md
+build:	## Builds all that is needed for website
+	-make go-build
+	make hugo-build
 
-package: ## Produces a file awesome-website.zip, containing the binary awesome-api and the directory dist/ directory
-	make build
-	zip -r awesome-website.zip dist
+post:		## Create a new blog post whose filename and title come from the environment variables POST_TITLE and POST_NAME
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build hugo new posts/${POST_NAME}.md
+	sed -i "s/title: .*/title: ${POST_TITLE}/" ./content/posts/${POST_NAME}.md
 
-lint:	## Lint markdown
-	apt-get install curl -y
-	curl --silent --location https://deb.nodesource.com/setup_16.x | bash -
-	apt-get install nodejs -y
-	npm install -g markdownlint-cli
-	markdownlint README.md DEPLOY.md
+check:  ## Lints and check for dead links on markdowns using markdownlint-cli and markdown-link-check
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build markdownlint ./content/posts/*.md
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build markdown-link-check ./content/posts/*.md
 
-unit-tests: ## Run unit tests
-	touch coverage-units.out
+validate: ## Validates dist/index.html using W3C Hbtn validator
+	-make build
+	-git clone https://github.com/holbertonschool/W3C-Validator.git
+	-./W3C-Validator/w3c_validator.py ./dist/index.html
+	-rm -rf ./W3C-Validator
 
-integration-tests: ## Run integrations test
-	touch coverage-integrations.out
+run:	## Runs the built binary and send everything to awesome.log
+	./awesome-api >./awesome.log 2>&1 &
 
-validate: ## Validate
+stop:	## Terminates the execution of awesome-api
+	kill $(shell pgrep awesome-api)
 
-build-docker:
-	docker build -t 'awesome:build' ./build
+clean:	## Removes binary and logs
+	-make stop
+	-rm -rf awesome-api awesome.log coverage* go* awesome-website.zip ./dist
 
-build-dependencies:
+test:	## Tests API using go test
+	-make build
+	make unit-tests
+	make integration-tests
 
+lint:	## Lints all the go files using golangci-lint
+	-make build-docker
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build markdownlint README.md DEPLOY.md
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app hadolint/hadolint hadolint build/Dockerfile
+
+unit-tests:	## Runs implemented unit test using go test
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build go test -v -short -coverprofile=coverage-units.out
+
+integration-tests:	## Runs integration test using go test
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build go test -v -coverprofile=coverage-integrations.out
+
+package:  ## Generates a zip archive to deployment
+	-make build
+	zip awesome-website.zip awesome-api dist/
+
+build-docker:	## Builds a Docker image from Dockerfile on build directory
+	docker build -t awesome:build ./build
+
+docker-tests:	## Test the generated docker image using container-structure-test and cst.yml config file
+	-make build-docker
+	container-structure-test test --image awesome:build --config build/cst.yml
 
 help:	## View all make commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | sed -e 's/##//'
