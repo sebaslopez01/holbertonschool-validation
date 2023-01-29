@@ -18,7 +18,7 @@ jobs:
       - run: sudo module4_task1/setup.sh
       - run: cd module4_task1 && sudo make build
       - run: cd module4_task1 && sudo make package
-      - run: cd module4_task1 && make lint
+      - run: cd module4_task1 && sudo make lint
       - run: cd module4_task1 && make unit-tests
       - run: cd module4_task1 && make integration-tests
       - run: cd module4_task1 && make validate
