@@ -40,6 +40,12 @@ Lint markdown
 
     make lint
 
+## Build Docker
+
+Builds a Docker image from Dockerfile on build directory
+
+    make build-docker
+
 ## Help
 
 View all make commands
