@@ -1,53 +1,33 @@
-# Documentation
+# My Awesome API
 
 ## Prerequisites
 
-- GoHugo
-- Go
-- Git
+go and make installed
 
 ## Lifecycle
 
-## Build
-
-Generate the website from the markdown and configuration files in the directory dist/
-
-    make build
-
-## Clean
-
-Cleanup the content of the directory dist/
-
-    make clean
-
-## Post
-
-Create a new blog post whose filename and title come from the environment
+go-build: Builds the API binary file using go
+hugo-build: Builds a website using gohugo on the dist folder
+build: Builds all that is needed for website
+post: Create a new blog post whose filename and title come from the environment
 variables POST_TITLE and POST_NAME
+check: Lints and check for dead links on markdowns using markdownlint-cli and
+markdown-link-check
+validate: Validates dist/index.html using W3C Hbtn validator
+run: Runs the built binary and send everything to awesome.log
+stop: Terminates the execution of awesome-api
+clean: Removes binary and logs
+test: Tests API using go test
+lint: Lints all the go files using golangci-lint
+unit-tests: Runs implemented unit test using go test
+integration-tests: Runs integration test using go test
+package: Generates a zip archive to deployment
+build-docker: Builds a Docker image from Dockerfile on build directory
+docker-tests: Test the generated docker image using container-structure-test
+and cst.yml config file
+help: Show this help message
 
-    make post
+## Workflow
 
-## Package
-
-Produces a file awesome-website.zip, containing the binary awesome-api
-and the directory dist/ directory
-
-    make package
-
-## Lint
-
-Lint markdown
-
-    make lint
-
-## Build Docker
-
-Builds a Docker image from Dockerfile on build directory
-
-    make build-docker
-
-## Help
-
-View all make commands
-
-    make help
+Github actions has been activated. Workflows can be found at directory
+.github/workflows
