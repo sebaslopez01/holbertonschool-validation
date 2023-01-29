@@ -23,5 +23,8 @@ integration-tests: ## Run integrations test
 
 validate: ## Validate
 
+build-docker:
+	docker build -t 'awesome:build' ./build
+
 help:	## View all make commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | sed -e 's/##//'
