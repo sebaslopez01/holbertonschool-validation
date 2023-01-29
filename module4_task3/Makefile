@@ -1,4 +1,8 @@
 .PHONY: build
+IMAGE_TAG=$(shell git tag | tail -n 1)
+ifeq ($(strip $(IMAGE_TAG)),)
+IMAGE_TAG=$(shell git rev-parse --abbrev-ref HEAD)
+endif
 
 go-build:	## Builds the API binary file using go
 	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build /bin/bash -c "go mod init github.com/Apinedas/awesome-api && go get github.com/gorilla/mux && go build"
@@ -43,6 +47,7 @@ lint:	## Lints all the go files using golangci-lint
 	-make build-docker
 	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build markdownlint README.md DEPLOY.md
 	docker run --rm --volume=$(shell pwd):/app --workdir=/app hadolint/hadolint hadolint build/Dockerfile
+	docker run --rm --volume=$(shell pwd):/app --workdir=/app hadolint/hadolint hadolint Dockerfile
 
 unit-tests:	## Runs implemented unit test using go test
 	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build go test -v -short -coverprofile=coverage-units.out
@@ -50,9 +55,10 @@ unit-tests:	## Runs implemented unit test using go test
 integration-tests:	## Runs integration test using go test
 	docker run --rm --volume=$(shell pwd):/app --workdir=/app awesome:build go test -v -coverprofile=coverage-integrations.out
 
-package:  ## Generates a zip archive to deployment
-	-make build
-	zip awesome-website.zip awesome-api dist/
+package: build  ## Generates a zip archive and a docker image to deployment
+	docker build -t awesome:${IMAGE_TAG} .
+	docker save -o awesome_image.tar awesome:${IMAGE_TAG}
+	zip awesome-website.zip awesome-api dist/ awesome_image.tar
 
 build-docker:	## Builds a Docker image from Dockerfile on build directory
 	docker build -t awesome:build ./build
@@ -60,6 +66,7 @@ build-docker:	## Builds a Docker image from Dockerfile on build directory
 docker-tests:	## Test the generated docker image using container-structure-test and cst.yml config file
 	-make build-docker
 	container-structure-test test --image awesome:build --config build/cst.yml
+	container-structure-test test --image awesome:${IMAGE_TAG} --config cst.yml
 
 help:	## View all make commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | sed -e 's/##//'
