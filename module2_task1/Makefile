@@ -20,4 +20,4 @@ lint:	## Lints all the go files using golangci-lint
 	golangci-lint run
 
 help:	## Show this help message
-	@fgrep -h "##" $(MAKEFILE_LIST) sed -e 's/\\$$//' | sed -e 's/##//'
+	@fgrep -h "##" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | sed -e 's/##//'
