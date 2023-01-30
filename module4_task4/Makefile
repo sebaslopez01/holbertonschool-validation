@@ -4,7 +4,7 @@ ifeq ($(strip $(IMAGE_TAG)),)
 IMAGE_TAG=$(shell git rev-parse --abbrev-ref HEAD)
 endif
 
-go-build:	## Builds the API binary file using go
+go-build:	## Builds the API binary file using g
 	go mod init github.com/Apinedas/awesome-api && go get github.com/gorilla/mux && go build
 
 hugo-build:		## Builds a website using gohugo on the dist folder
