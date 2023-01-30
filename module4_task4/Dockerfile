@@ -27,3 +27,4 @@ COPY --from=builder /app/awesome-api .
 # hadolint ignore=DL3018,DL3019
 RUN apk add gcompat
 ENTRYPOINT [ "/app/awesome-api" ]
+CMD run /module4_task4/docker/DockerFile
