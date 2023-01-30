@@ -10,11 +10,11 @@ stop:	## Terminates the execution of awesome-api
 
 clean:	## Removes binary and logs
 	-make stop
-	-rm ./awesome-api awesome.log
+	-rm ./awesome-api awesome.log coverage*
 
-test:	## Tests the API using curl
-	curl http://localhost:9999 
-	curl http://localhost:9999/health 
+test:	## Tests API using go test
+	make unit-tests
+	make integration-tests
 
 lint:	## Lints all the go files using golangci-lint
 	golangci-lint run
