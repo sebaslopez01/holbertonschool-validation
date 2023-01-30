@@ -19,4 +19,4 @@ validate: ## Validates dist/index.html using W3C Hbtn validator
 	-rm -rf ./W3C-Validator
 
 help:	## Show this help message
-	@fgrep -h "##" $(MAKEFILE_LIST) | sed -e 's/\\$$//' | sed -e 's/##//'
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
