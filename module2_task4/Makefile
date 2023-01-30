@@ -1,6 +1,3 @@
-build: check		## Builds a website using gohugo on the dist folder
-	hugo
-
 clean:		## Cleans the dist folder
 	rm -rf dist
 
@@ -11,6 +8,9 @@ post:		## Create a new blog post whose filename and title come from the environm
 check:  ## Lints and check for dead links on markdowns using markdownlint-cli and markdown-link-check
 	markdownlint ./content/posts/*.md
 	markdown-link-check ./content/posts/*.md
+
+build: check		## Builds a website using gohugo on the dist folder
+	hugo
 
 validate: ## Validates dist/index.html using W3C Hbtn validator
 	make build
